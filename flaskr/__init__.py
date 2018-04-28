@@ -18,12 +18,14 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.route('/')
-    def root():
-        return 'This is the root page <a href="/hello">Go to hello</a>'
-
     @app.route('/hello')
     def hello():
         return 'Hello World!'
+
+    from . import db
+    db.init_app(app)
+
+    from . import auth
+    app.register_blueprint(auth.bp)
 
     return app
